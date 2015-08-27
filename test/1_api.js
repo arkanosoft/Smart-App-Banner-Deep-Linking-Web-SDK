@@ -124,8 +124,8 @@ describe('Server', function() {
 		});
 
 		requests = [];
-		xhr.onCreate = function(xhr) {
-			requests.push(xhr);
+		xhr.onCreate = function(onCreateXhr) {
+			requests.push(onCreateXhr);
 		};
 	});
 

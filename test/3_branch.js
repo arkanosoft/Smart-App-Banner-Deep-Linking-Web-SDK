@@ -32,7 +32,7 @@ describe('Branch', function() {
 		}
 		var branch = new Branch();
 
-		sandbox.stub(branch._server, 'request', function(resource, obj, storage, callback) {
+		sandbox.stub(branch._server, 'request', function(resource, obj, stubStorage, callback) {
 			requests.push({
 				resource: resource,
 				obj: obj,

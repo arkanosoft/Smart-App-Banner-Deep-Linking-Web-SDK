@@ -66,16 +66,16 @@ Server.prototype.getUrl = function(resource, data) {
 	var branch_id = /^[0-9]{15,20}$/;
 	var branch_key = /key_(live|test)_[A-Za-z0-9]{32}/;
 
-	var appendKeyOrId = function(data, destinationObject) {
+	var appendKeyOrId = function(dataToAppend, destinationObject) {
 		if (typeof destinationObject === 'undefined') {
 			destinationObject = { };
 		}
-		if (data['branch_key'] && branch_key.test(data['branch_key'])) {
-			destinationObject['branch_key'] = data['branch_key'];
+		if (dataToAppend['branch_key'] && branch_key.test(dataToAppend['branch_key'])) {
+			destinationObject['branch_key'] = dataToAppend['branch_key'];
 			return destinationObject;
 		}
-		else if (data['app_id'] && branch_id.test(data['app_id'])) {
-			destinationObject['app_id'] = data['app_id'];
+		else if (dataToAppend['app_id'] && branch_id.test(dataToAppend['app_id'])) {
+			destinationObject['app_id'] = dataToAppend['app_id'];
 			return destinationObject;
 		}
 		else {
@@ -311,7 +311,7 @@ Server.prototype.request = function(resource, data, storage, callback) {
 	/***
 	 * @type {function(?Error,*=): ?undefined}
 	 */
-	var done = function(err, data, status) {
+	var done = function(err, doneData, status) {
 		if (err && retries > 0 && status.toString().substring(0, 1) === '5') {
 			retries--;
 			window.setTimeout(function() {
@@ -319,7 +319,7 @@ Server.prototype.request = function(resource, data, storage, callback) {
 			}, RETRY_DELAY);
 		}
 		else {
-			callback(err, data);
+			callback(err, doneData);
 		}
 	};
 	var makeRequest = function() {

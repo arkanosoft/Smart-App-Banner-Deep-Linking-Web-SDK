@@ -42,8 +42,8 @@ describe('Integration tests', function() {
 	before(function() {
 		xhr = sinon.useFakeXMLHttpRequest();
 		clock = sinon.useFakeTimers();
-		xhr.onCreate = function(xhr) {
-			requests.push(xhr);
+		xhr.onCreate = function(onCreateXhr) {
+			requests.push(onCreateXhr);
 		};
 		if (window.WEB_BUILD) {
 			sinon.stub(branch._server, 'createScript', function(src) {

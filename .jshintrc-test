@@ -27,7 +27,7 @@
 		"testUtils"
 	],
 	"scripturl": true,
-	"shadow": "inner",
+	"shadow": "outer",
 	"strict": true,
 	"sub": true,
 	"trailing": true,

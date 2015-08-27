@@ -77,7 +77,7 @@ banner_utils.addCSSLengths = function(length1, length2) {
 		}
 		var unit = input.replace(/[0-9,\.]/g, '');
 		var inputArray = input.match(/\d+/g);
-		var value = parseInt(inputArray.length > 0 ? inputArray[0] : '0', 10);
+		var parsedIntValue = parseInt(inputArray.length > 0 ? inputArray[0] : '0', 10);
 		var vw = function() {
 			return Math.max(document.documentElement.clientWidth, window.innerWidth || 0) / 100;
 		};
@@ -119,10 +119,10 @@ banner_utils.addCSSLengths = function(length1, length2) {
 				"vmax": function(value) {
 					return value * Math.max(vh(), vw());
 				},
-				"%": function() {
+				"%": function(value) {
 					return (document.body.clientWidth / 100) * value;
 				}
-			}[unit](value),
+			}[unit](parsedIntValue),
 			10
 		);
 	};

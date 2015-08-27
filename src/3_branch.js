@@ -358,7 +358,7 @@ Branch.prototype['init'] = wrap(
 			(url ? utils.getParamValue(url) : null);
 		var freshInstall = !sessionData || !sessionData['identity_id'];
 
-		var checkHasApp = function(sessionData, cb) {
+		var checkHasApp = function(checkHasAppSessionData, cb) {
 			if (WEB_BUILD) {
 				self._api(
 					resources._r,
@@ -370,7 +370,7 @@ Branch.prototype['init'] = wrap(
 					}
 				);
 			}
-			var currentSessionData = sessionData || session.get(self._storage);
+			var currentSessionData = checkHasAppSessionData || session.get(self._storage);
 			self._api(
 				resources.hasApp,
 				{ "browser_fingerprint_id": currentSessionData['browser_fingerprint_id'] },
@@ -458,8 +458,8 @@ Branch.prototype['init'] = wrap(
 					self._api(
 						freshInstall ? resources.install : resources.open,
 						data,
-						function(err, data) {
-							finishInit(err, data);
+						function(installOrOpenErr, installOrOpenData) {
+							finishInit(installOrOpenErr, installOrOpenData);
 						}
 					);
 				};
@@ -500,9 +500,9 @@ Branch.prototype['init'] = wrap(
 				self._api(
 					resources._r,
 					{ "sdk": config.version },
-					function(err, browser_fingerprint_id) {
-						if (err) {
-							return finishInit(err, null);
+					function(rErr, browser_fingerprint_id) {
+						if (rErr) {
+							return finishInit(rErr, null);
 						}
 						self._api(
 							resources.open,
@@ -511,12 +511,12 @@ Branch.prototype['init'] = wrap(
 								"is_referrable": 1,
 								"browser_fingerprint_id": browser_fingerprint_id
 							},
-							function(err, data) {
-								if (data && link_identifier) {
-									data['click_id'] = link_identifier;
+							function(openErr, openData) {
+								if (openData && link_identifier) {
+									openData['click_id'] = link_identifier;
 								}
 								attachVisibilityEvent();
-								finishInit(err, data);
+								finishInit(openErr, openData);
 							}
 						);
 					}
@@ -865,9 +865,13 @@ Branch.prototype['track'] = wrap(callback_params.CALLBACK_ERR, function(done, ev
 /*** +TOC_HEADING &Deep Linking& ^ALL ***/
 /*** +TOC_ITEM #linkdata-callback &.link()& ^ALL ***/
 Branch.prototype['link'] = wrap(callback_params.CALLBACK_ERR_DATA, function(done, data) {
-	this._api(resources.link, utils.cleanLinkData(data, config), function(err, data) {
-		done(err, data && data['url']);
-	});
+	this._api(
+		resources.link,
+		utils.cleanLinkData(data, config),
+		function(linkErr, linkData) {
+			done(linkErr, linkData && linkData['url']);
+		}
+	);
 });
 
 /**
@@ -988,23 +992,23 @@ Branch.prototype['sendSMS'] = wrap(
 			self._api(
 				resources.link,
 				utils.cleanLinkData(linkData, config),
-				function(err, data) {
-					if (err) {
-						return done(err);
+				function(apiLinkErr, apiLinkData) {
+					if (apiLinkErr) {
+						return done(apiLinkErr);
 					}
-					var url = data['url'];
+					var url = apiLinkData['url'];
 					self._api(
 						resources.linkClick,
 						{
 							"link_url": 'l/' + url.split('/').pop(),
 							"click": "click"
 						},
-						function(err, data) {
-							if (err) {
-								return done(err);
+						function(linkClickErr, linkClickData) {
+							if (linkClickErr) {
+								return done(linkClickErr);
 							}
-							self._storage.set('click_id', data['click_id']);
-							sendSMS(data['click_id']);
+							self._storage.set('click_id', linkClickData['click_id']);
+							sendSMS(linkClickData['click_id']);
 						}
 					);
 				}
