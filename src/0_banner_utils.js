@@ -77,7 +77,7 @@ banner_utils.addCSSLengths = function(length1, length2) {
 		}
 		var unit = input.replace(/[0-9,\.]/g, '');
 		var inputArray = input.match(/\d+/g);
-		var parsedIntValue = parseInt(inputArray.length > 0 ? inputArray[0] : '0', 10);
+		var parsedIntValue = inputArray.length > 0 ? parseInt(inputArray[0], 10) : 0;
 		var vw = function() {
 			return Math.max(document.documentElement.clientWidth, window.innerWidth || 0) / 100;
 		};
@@ -94,22 +94,22 @@ banner_utils.addCSSLengths = function(length1, length2) {
 		};
 
 		switch (unit) {
-			case 'px':
-				return parsedIntValue;
-			case 'em':
-				return parsedIntValue * fontSizeInUnitlessPixels(document.body);
-			case 'rem':
-				return parsedIntValue * fontSizeInUnitlessPixels(document.documentElement);
-			case 'vw':
-				return parsedIntValue * vw();
-			case 'vh':
-				return parsedIntValue * vh();
-			case 'vmin':
-				return parsedIntValue * Math.min(vh(), vw());
-			case 'vmax':
-				return parsedIntValue * Math.max(vh(), vw());
-			case '%':
-				return parsedIntValue * (document.body.clientWidth / 100);
+		case 'px':
+			return parsedIntValue;
+		case 'em':
+			return parsedIntValue * fontSizeInUnitlessPixels(document.body);
+		case 'rem':
+			return parsedIntValue * fontSizeInUnitlessPixels(document.documentElement);
+		case 'vw':
+			return parsedIntValue * vw();
+		case 'vh':
+			return parsedIntValue * vh();
+		case 'vmin':
+			return parsedIntValue * Math.min(vh(), vw());
+		case 'vmax':
+			return parsedIntValue * Math.max(vh(), vw());
+		case '%':
+			return parsedIntValue * (document.body.clientWidth / 100);
 		}
 	};
 	return (convertToUnitlessPixels(length1) + convertToUnitlessPixels(length2)).toString() + 'px';

@@ -970,7 +970,7 @@ var banner_utils = {animationSpeed:250, animationDelay:20, bannerHeight:"76px", 
     }
     var b = a.replace(/[0-9,\.]/g, "");
     a = a.match(/\d+/g);
-    a = parseInt(0 < a.length ? a[0] : "0", 10);
+    a = 0 < a.length ? parseInt(a[0], 10) : 0;
     var f = function() {
       return Math.max(document.documentElement.clientWidth, window.innerWidth || 0) / 100;
     }, g = function() {
