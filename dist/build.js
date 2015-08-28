@@ -970,28 +970,32 @@ var banner_utils = {animationSpeed:250, animationDelay:20, bannerHeight:"76px", 
     }
     var b = a.replace(/[0-9,\.]/g, "");
     a = a.match(/\d+/g);
-    var f = parseInt(0 < a.length ? a[0] : "0", 10), g = function() {
+    a = parseInt(0 < a.length ? a[0] : "0", 10);
+    var f = function() {
       return Math.max(document.documentElement.clientWidth, window.innerWidth || 0) / 100;
-    }, h = function() {
+    }, g = function() {
       return Math.max(document.documentElement.clientHeight, window.innerHeight || 0) / 100;
+    }, h = function(a) {
+      return a.currentStyle ? c(a.currentStyle.fontSize) : parseFloat(window.getComputedStyle(a).fontSize);
     };
-    return parseInt({px:function(a) {
-      return a;
-    }, em:function(a) {
-      return document.body.currentStyle ? a * c(document.body.currentStyle.fontSize) : a * parseFloat(window.getComputedStyle(document.body).fontSize);
-    }, rem:function(a) {
-      return document.documentElement.currentStyle ? a * c(document.documentElement.currentStyle.fontSize) : a * parseFloat(window.getComputedStyle(document.documentElement).fontSize);
-    }, vw:function(a) {
-      return a * g();
-    }, vh:function(a) {
-      return a * h();
-    }, vmin:function(a) {
-      return a * Math.min(h(), g());
-    }, vmax:function(a) {
-      return a * Math.max(h(), g());
-    }, "%":function() {
-      return document.body.clientWidth / 100 * f;
-    }}[b](f), 10);
+    switch(b) {
+      case "px":
+        return a;
+      case "em":
+        return a * h(document.body);
+      case "rem":
+        return a * h(document.documentElement);
+      case "vw":
+        return a * f();
+      case "vh":
+        return a * g();
+      case "vmin":
+        return a * Math.min(g(), f());
+      case "vmax":
+        return a * Math.max(g(), f());
+      case "%":
+        return document.body.clientWidth / 100 * a;
+    }
   };
   return (c(a) + c(b)).toString() + "px";
 }, shouldAppend:function(a, b) {
