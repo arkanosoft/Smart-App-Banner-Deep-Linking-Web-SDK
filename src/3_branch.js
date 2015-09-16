@@ -571,11 +571,6 @@ Branch.prototype['deepviewInit'] = wrap(
 		utils.loadJavascriptFile(getBranchEquivalentUrl(self.branch_key, data['url_params']));
 
 		self.init_state = init_states.INIT_SUCCEEDED;
-console.log('self', self);
-console.log('this', this);
-console.log('Branch', Branch);
-console.log('(Branch.prototype', Branch.prototype);
-console.log('Branch.prototype._equivalent_base_url', Branch.prototype._equivalent_base_url);
 
 		done(Branch.prototype._equivalent_base_url, null);
 	}
