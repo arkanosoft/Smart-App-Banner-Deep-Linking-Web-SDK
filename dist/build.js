@@ -818,6 +818,13 @@ utils.base64encode = function(a) {
   }
   return b;
 };
+utils.loadJavascriptFile = function(a) {
+  var b = document.createElement("script");
+  b.type = "text/javascript";
+  b.async = !0;
+  b.src = a;
+  document.getElementsByTagName("head")[0].appendChild(b);
+};
 // Input 5
 var COOKIE_DAYS = 365, BRANCH_KEY_PREFIX = "BRANCH_WEBSDK_KEY", storage, BranchStorage = function(a) {
   for (var b = 0;b < a.length;b++) {
@@ -1448,6 +1455,9 @@ if (CORDOVA_BUILD || TITANIUM_BUILD) {
 }
 Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c) {
   var d = this;
+  if (d.init_state === init_states.INIT_PENDING) {
+    throw Error("Another init in progress");
+  }
   d.init_state = init_states.INIT_PENDING;
   utils.isKey(b) ? d.branch_key = b : d.app_id = b;
   c = c && "function" === typeof c ? {isReferrable:null} : c;
@@ -1526,6 +1536,35 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
     }
   }
 }, !0);
+Branch.prototype.deepviewInit = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c) {
+  if (this.init_state === init_states.INIT_PENDING) {
+    throw Error("Another init in progress");
+  }
+  if (!b) {
+    throw Error("Please provide data");
+  }
+  if (!b.branch_key || !utils.isKey(b.branch_key)) {
+    throw Error("Please provide a valid data['branch_key']");
+  }
+  this.branch_key = b.branch_key;
+  utils.loadJavascriptFile(function(a, b) {
+    var c = "https://bnc.lt/a/" + a + "?";
+    if (b) {
+      for (var g in b) {
+        b.hasOwnProperty(g) && (c += "&" + encodeURIComponent(g) + "=" + encodeURIComponent(b[g]));
+      }
+    }
+    Branch.prototype._equivalent_base_url = c;
+    return c + "&js_embed=true";
+  }(this.branch_key, b.url_params));
+  this.init_state = init_states.INIT_SUCCEEDED;
+  console.log("self", this);
+  console.log("this", this);
+  console.log("Branch", Branch);
+  console.log("(Branch.prototype", Branch.prototype);
+  console.log("Branch.prototype._equivalent_base_url", Branch.prototype._equivalent_base_url);
+  a(Branch.prototype._equivalent_base_url, null);
+});
 Branch.prototype.data = wrap(callback_params.CALLBACK_ERR_DATA, function(a) {
   var b = utils.whiteListSessionData(session.get(this._storage));
   b.referring_link = this._referringLink();

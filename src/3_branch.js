@@ -299,6 +299,9 @@ Branch.prototype['init'] = wrap(
 	function(done, branch_key, options) {
 		var self = this;
 
+		if (self.init_state === init_states.INIT_PENDING) {
+			throw Error('Another init in progress');
+		}
 		self.init_state = init_states.INIT_PENDING;
 
 		if (utils.isKey(branch_key)) {
@@ -527,6 +530,55 @@ Branch.prototype['init'] = wrap(
 		}
 	},
 	true
+);
+
+/**
+ * @function Branch.deepviewInit
+ * @param {function(?Error, utils.sessionData=)=} callback - _optional_ - callback to read the session data.
+ */
+Branch.prototype['deepviewInit'] = wrap(
+	callback_params.CALLBACK_ERR_DATA,
+	function(done, data, options) {
+		var self = this;
+		var sanityChecks = function(data) {
+			if (self.init_state === init_states.INIT_PENDING) {
+				throw Error('Another init in progress');
+			}
+			if (!data) {
+				throw Error('Please provide data');
+			}
+			if (!data['branch_key'] || !utils.isKey(data['branch_key'])) { // we no longer support app_id
+				throw Error("Please provide a valid data['branch_key']");
+			}
+		};
+		sanityChecks(data);
+
+		self.branch_key = data['branch_key'];
+
+		var getBranchEquivalentUrl = function(branch_key, params) {
+			var url = 'https://bnc.lt/a/' + branch_key + '?';
+			if (params) {
+				for (var key in params) {
+					if (params.hasOwnProperty(key)) {
+						url += '&' + encodeURIComponent(key) +
+							'=' + encodeURIComponent(params[key]);
+					}
+				}
+			}
+			Branch.prototype._equivalent_base_url = url;
+			return url + '&js_embed=true';
+		};
+		utils.loadJavascriptFile(getBranchEquivalentUrl(self.branch_key, data['url_params']));
+
+		self.init_state = init_states.INIT_SUCCEEDED;
+console.log('self', self);
+console.log('this', this);
+console.log('Branch', Branch);
+console.log('(Branch.prototype', Branch.prototype);
+console.log('Branch.prototype._equivalent_base_url', Branch.prototype._equivalent_base_url);
+
+		done(Branch.prototype._equivalent_base_url, null);
+	}
 );
 
 /**
@@ -1381,7 +1433,8 @@ Branch.prototype['redeem'] = wrap(callback_params.CALLBACK_ERR, function(done, a
 		{
 			"amount": amount,
 			"bucket": bucket
-		}, done
+		},
+		done
 	);
 });
 

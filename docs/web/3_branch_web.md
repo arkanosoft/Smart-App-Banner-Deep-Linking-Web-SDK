@@ -61,6 +61,14 @@ ___
 
 
 
+### deepviewInit(callback) 
+
+**Parameters**
+
+**callback**: `function`, _optional_ - callback to read the session data.
+
+
+
 ### data(callback) 
 
 **Parameters**
