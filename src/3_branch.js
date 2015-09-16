@@ -299,9 +299,6 @@ Branch.prototype['init'] = wrap(
 	function(done, branch_key, options) {
 		var self = this;
 
-		if (self.init_state === init_states.INIT_PENDING) {
-			throw Error('Another init in progress');
-		}
 		self.init_state = init_states.INIT_PENDING;
 
 		if (utils.isKey(branch_key)) {
