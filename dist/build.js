@@ -1455,9 +1455,6 @@ if (CORDOVA_BUILD || TITANIUM_BUILD) {
 }
 Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c) {
   var d = this;
-  if (d.init_state === init_states.INIT_PENDING) {
-    throw Error("Another init in progress");
-  }
   d.init_state = init_states.INIT_PENDING;
   utils.isKey(b) ? d.branch_key = b : d.app_id = b;
   c = c && "function" === typeof c ? {isReferrable:null} : c;
@@ -1558,11 +1555,6 @@ Branch.prototype.deepviewInit = wrap(callback_params.CALLBACK_ERR_DATA, function
     return c + "&js_embed=true";
   }(this.branch_key, b.url_params));
   this.init_state = init_states.INIT_SUCCEEDED;
-  console.log("self", this);
-  console.log("this", this);
-  console.log("Branch", Branch);
-  console.log("(Branch.prototype", Branch.prototype);
-  console.log("Branch.prototype._equivalent_base_url", Branch.prototype._equivalent_base_url);
   a(Branch.prototype._equivalent_base_url, null);
 });
 Branch.prototype.data = wrap(callback_params.CALLBACK_ERR_DATA, function(a) {
