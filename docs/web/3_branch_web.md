@@ -37,7 +37,7 @@ the link the user was referred by.
 ```js
 branch.init(
     branch_key,
-    options
+    options,
     callback (err, data),
 );
 ```
@@ -98,7 +98,7 @@ ___
 
 **Parameters**
 
-**identity**: `string`, _required_ - a string uniquely identifying the user – often a user ID or email address.
+**identity**: `string`, _required_ - a string uniquely identifying the user - often a user ID or email address.
 
 **callback**: `function`, _optional_ - callback that returns the user's Branch identity id and unique link.
 
@@ -662,7 +662,7 @@ callback(
 );
 ```
 
----
+___
 
 ## Credit redemption
 
