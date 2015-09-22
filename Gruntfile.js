@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 					browsers: [].concat(
 						safari_browsers,
 						chrome_browsers,
-						// firefox_browsers,
+						firefox_browsers,
 						android_browsers,
 						ios_browsers,
 						ie_browsers)
