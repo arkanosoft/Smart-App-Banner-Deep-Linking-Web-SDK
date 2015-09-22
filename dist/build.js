@@ -1392,10 +1392,10 @@ var default_branch, callback_params = {NO_CALLBACK:0, CALLBACK_ERR:1, CALLBACK_E
         a === callback_params.CALLBACK_ERR ? f(b) : a === callback_params.CALLBACK_ERR_DATA && f(b, c);
         g();
       };
+      if (d.init_state === init_states.INIT_PENDING) {
+        return k(Error(utils.message(utils.messages.initPending)), null);
+      }
       if (!c) {
-        if (d.init_state === init_states.INIT_PENDING) {
-          return k(Error(utils.message(utils.messages.initPending)), null);
-        }
         if (d.init_state === init_states.INIT_FAILED) {
           return k(Error(utils.message(utils.messages.initFailed)), null);
         }

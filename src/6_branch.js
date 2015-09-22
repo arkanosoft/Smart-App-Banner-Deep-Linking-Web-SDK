@@ -78,11 +78,11 @@ var wrap = function(parameters, func, init) {
 				}
 				next();
 			};
+			if (self.init_state === init_states.INIT_PENDING) {
+				return done(new Error(utils.message(utils.messages.initPending)), null);
+			}
 			if (!init) {
-				if (self.init_state === init_states.INIT_PENDING) {
-					return done(new Error(utils.message(utils.messages.initPending)), null);
-				}
-				else if (self.init_state === init_states.INIT_FAILED) {
+				if (self.init_state === init_states.INIT_FAILED) {
 					return done(new Error(utils.message(utils.messages.initFailed)), null);
 				}
 				else if (self.init_state === init_states.NO_INIT || !self.init_state) {
