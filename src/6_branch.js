@@ -294,237 +294,241 @@ if (CORDOVA_BUILD || TITANIUM_BUILD) {
  */
 /*** +TOC_HEADING &Branch Session& ^ALL ***/
 /*** +TOC_ITEM #initbranch_key-options-callback &.init()& ^ALL ***/
-Branch.prototype['init'] = wrap(
-	callback_params.CALLBACK_ERR_DATA,
-	function(done, branch_key, options) {
-		var self = this;
+Branch.prototype._init = function(done, branch_key, options) {
+	var self = this;
 
-		self.init_state = init_states.INIT_PENDING;
+	self.init_state = init_states.INIT_PENDING;
 
-		if (utils.isKey(branch_key)) {
-			self.branch_key = branch_key;
+	if (utils.isKey(branch_key)) {
+		self.branch_key = branch_key;
+	}
+	else {
+		self.app_id = branch_key;
+	}
+
+	options = (options && typeof options === 'function') ?
+		{
+			"isReferrable": null
+		} :
+		options;
+
+	if (TITANIUM_BUILD && Ti.Platform.osname === 'android') {
+		self.keepAlive = true;
+	}
+
+	var setBranchValues = function(data) {
+		if (data['session_id']) {
+			self.session_id = data['session_id'].toString();
 		}
-		else {
-			self.app_id = branch_key;
+		if (data['identity_id']) {
+			self.identity_id = data['identity_id'].toString();
 		}
-
-		options = (options && typeof options === 'function') ?
-			{
-				"isReferrable": null
-			} :
-			options;
-
-		if (TITANIUM_BUILD && Ti.Platform.osname === 'android') {
-			self.keepAlive = true;
+		if (data['link']) {
+			self.sessionLink = data['link'];
 		}
-
-		var setBranchValues = function(data) {
-			if (data['session_id']) {
-				self.session_id = data['session_id'].toString();
-			}
-			if (data['identity_id']) {
-				self.identity_id = data['identity_id'].toString();
-			}
-			if (data['link']) {
-				self.sessionLink = data['link'];
-			}
-			if (data['referring_link']) {
-				data['referring_link'] = utils.processReferringLink(data['referring_link']);
-			}
-			if (!data['click_id'] && data['referring_link']) {
-				data['click_id'] = utils.clickIdFromLink(data['referring_link']);
-			}
-
-			if (CORDOVA_BUILD || TITANIUM_BUILD) {
-				self.device_fingerprint_id = data['device_fingerprint_id'];
-				if (data['link_click_id']) {
-					self.link_click_id = data['link_click_id'];
-				}
-			}
-			return data;
-		};
-
-		var isReferrable = (options &&
-				typeof options.isReferrable !== 'undefined' &&
-				options.isReferrable !== null) ?
-			options.isReferrable :
-			null;
-		var sessionData = session.get(self._storage);
-		var url = (options && typeof options.url !== 'undefined' && options.url !== null) ?
-			options.url :
-			null;
-		var link_identifier = WEB_BUILD ?
-			(utils.getParamValue('_branch_match_id') || utils.hashValue('r')) :
-			(url ? utils.getParamValue(url) : null);
-		var freshInstall = !sessionData || !sessionData['identity_id'];
-
-		var checkHasApp = function(sessionData, cb) {
-			if (WEB_BUILD) {
-				self._api(
-					resources._r,
-					{ "sdk": config.version },
-					function(err, browser_fingerprint_id) {
-						if (browser_fingerprint_id) {
-							currentSessionData['browser_fingerprint_id'] = browser_fingerprint_id;
-						}
-					}
-				);
-			}
-			var currentSessionData = sessionData || session.get(self._storage);
-			self._api(
-				resources.hasApp,
-				{ "browser_fingerprint_id": currentSessionData['browser_fingerprint_id'] },
-				function(err, has_app) {
-					if (has_app && !currentSessionData['has_app']) {
-						currentSessionData['has_app'] = true;
-						session.update(self._storage, currentSessionData);
-						self._publishEvent('didDownloadApp');
-					}
-					if (cb) {
-						cb(err, currentSessionData);
-					}
-				}
-			);
-		};
-
-		var finishInit = function(err, data) {
-			if (data) {
-				data = setBranchValues(data);
-				session.set(self._storage, data, freshInstall);
-
-				self.init_state = init_states.INIT_SUCCEEDED;
-				data['data_parsed'] = data['data'] ? goog.json.parse(data['data']) : null;
-			}
-			if (err) {
-				self.init_state = init_states.INIT_FAILED;
-			}
-
-			// Keep android titanium from calling close
-			if (self.keepAlive) {
-				setTimeout(
-					function() {
-						self.keepAlive = false;
-					},
-					2000
-				);
-			}
-			done(err, data && utils.whiteListSessionData(data));
-		};
-
-		var attachVisibilityEvent = function() {
-			var hidden;
-			var changeEvent;
-			if (typeof document.hidden !== 'undefined') {
-				hidden = 'hidden';
-				changeEvent = 'visibilitychange';
-			}
-			else if (typeof document.mozHidden !== 'undefined') {
-				hidden = 'mozHidden';
-				changeEvent = 'mozvisibilitychange';
-			}
-			else if (typeof document.msHidden !== 'undefined') {
-				hidden = 'msHidden';
-				changeEvent = 'msvisibilitychange';
-			}
-			else if (typeof document.webkitHidden !== 'undefined') {
-				hidden = 'webkitHidden';
-				changeEvent = 'webkitvisibilitychange';
-			}
-			if (changeEvent) {
-				document.addEventListener(changeEvent, function() {
-					if (!document[hidden]) {
-						checkHasApp(null, null);
-					}
-				}, false);
-			}
-		};
-
-		if (WEB_BUILD &&
-				sessionData &&
-				sessionData['session_id'] &&
-				(utils.processReferringLink(link_identifier) === sessionData['referring_link'] ||
-				link_identifier === sessionData['click_id'])) {
-			attachVisibilityEvent();
-			checkHasApp(sessionData, finishInit);
-			return;
+		if (data['referring_link']) {
+			data['referring_link'] = utils.processReferringLink(data['referring_link']);
+		}
+		if (!data['click_id'] && data['referring_link']) {
+			data['click_id'] = utils.clickIdFromLink(data['referring_link']);
 		}
 
+		if (CORDOVA_BUILD || TITANIUM_BUILD) {
+			self.device_fingerprint_id = data['device_fingerprint_id'];
+			if (data['link_click_id']) {
+				self.link_click_id = data['link_click_id'];
+			}
+		}
+		return data;
+	};
+
+	var sessionData = session.get(self._storage);
+	var url = (options && typeof options.url !== 'undefined' && options.url !== null) ?
+		options.url :
+		null;
+	var link_identifier = WEB_BUILD ?
+		(utils.getParamValue('_branch_match_id') || utils.hashValue('r')) :
+		(url ? utils.getParamValue(url) : null);
+	var freshInstall = !sessionData || !sessionData['identity_id'];
+
+	var checkHasApp = function(sessionData, cb) {
 		if (WEB_BUILD) {
 			self._api(
 				resources._r,
 				{ "sdk": config.version },
 				function(err, browser_fingerprint_id) {
-					if (err) {
-						return finishInit(err, null);
+					if (browser_fingerprint_id) {
+						currentSessionData['browser_fingerprint_id'] = browser_fingerprint_id;
 					}
-					self._api(
-						resources.open,
-						{
-							"link_identifier": link_identifier,
-							"is_referrable": 1,
-							"browser_fingerprint_id": browser_fingerprint_id
-						},
-						function(err, data) {
-							if (data && link_identifier) {
-								data['click_id'] = link_identifier;
-							}
-							attachVisibilityEvent();
-							finishInit(err, data);
-						}
-					);
 				}
 			);
-			return;
+		}
+		var currentSessionData = sessionData || session.get(self._storage);
+		self._api(
+			resources.hasApp,
+			{ "browser_fingerprint_id": currentSessionData['browser_fingerprint_id'] },
+			function(err, has_app) {
+				if (has_app && !currentSessionData['has_app']) {
+					currentSessionData['has_app'] = true;
+					session.update(self._storage, currentSessionData);
+					self._publishEvent('didDownloadApp');
+				}
+				if (cb) {
+					cb(err, currentSessionData);
+				}
+			}
+		);
+	};
+
+	var finishInit = function(err, data) {
+		if (data) {
+			data = setBranchValues(data);
+			session.set(self._storage, data, freshInstall);
+
+			self.init_state = init_states.INIT_SUCCEEDED;
+			data['data_parsed'] = data['data'] ? goog.json.parse(data['data']) : null;
+		}
+		if (err) {
+			self.init_state = init_states.INIT_FAILED;
 		}
 
-		var apiCordovaTitanium = function(data) {
-			if (!freshInstall) {
-				data['identity_id'] = sessionData['identity_id'];
-				data['device_fingerprint_id'] = sessionData['device_fingerprint_id'];
-			}
-			self._api(
-				freshInstall ? resources.install : resources.open,
-				data,
-				function(err, data) {
-					finishInit(err, data);
-				}
-			);
-		};
-
-		if (CORDOVA_BUILD) {
-			var args = [ ];
-			if (isReferrable !== null) {
-				args.push(isReferrable ? 1 : 0);
-			}
-			cordova.require('cordova/exec')(
-				apiCordovaTitanium,
+		// Keep android titanium from calling close
+		if (self.keepAlive) {
+			setTimeout(
 				function() {
-					done('Error getting device data!');
+					self.keepAlive = false;
 				},
-				'BranchDevice',
-				freshInstall ? 'getInstallData' : 'getOpenData',
-				args
+				2000
 			);
 		}
-		else if (TITANIUM_BUILD) {
-			var data = { };
-			var branchTitaniumSDK = require('io.branch.sdk');
-			if (link_identifier) {
-				data['link_identifier'] = link_identifier;
-			}
-			if (freshInstall) {
-				data = branchTitaniumSDK.getInstallData(
-					self.debug,
-					(isReferrable === null) ? -1 : (isReferrable ? 1 : 0)
-				);
-			}
-			else {
-				data = branchTitaniumSDK.getOpenData(
-					(isReferrable === null) ? -1 : (isReferrable ? 1 : 0)
-				);
-			}
-			apiCordovaTitanium(data);
+		done(err, data && utils.whiteListSessionData(data));
+	};
+
+	var attachVisibilityEvent = function() {
+		var hidden;
+		var changeEvent;
+		if (typeof document.hidden !== 'undefined') {
+			hidden = 'hidden';
+			changeEvent = 'visibilitychange';
 		}
+		else if (typeof document.mozHidden !== 'undefined') {
+			hidden = 'mozHidden';
+			changeEvent = 'mozvisibilitychange';
+		}
+		else if (typeof document.msHidden !== 'undefined') {
+			hidden = 'msHidden';
+			changeEvent = 'msvisibilitychange';
+		}
+		else if (typeof document.webkitHidden !== 'undefined') {
+			hidden = 'webkitHidden';
+			changeEvent = 'webkitvisibilitychange';
+		}
+		if (changeEvent) {
+			document.addEventListener(changeEvent, function() {
+				if (!document[hidden]) {
+					checkHasApp(null, null);
+				}
+			}, false);
+		}
+	};
+
+	if (WEB_BUILD &&
+			sessionData &&
+			sessionData['session_id'] &&
+			(utils.processReferringLink(link_identifier) === sessionData['referring_link'] ||
+			link_identifier === sessionData['click_id'])) {
+		attachVisibilityEvent();
+		checkHasApp(sessionData, finishInit);
+		return;
+	}
+
+	if (WEB_BUILD) {
+		self._api(
+			resources._r,
+			{ "sdk": config.version },
+			function(err, browser_fingerprint_id) {
+				if (err) {
+					return finishInit(err, null);
+				}
+				self._api(
+					resources.open,
+					{
+						"link_identifier": link_identifier,
+						"is_referrable": 1,
+						"browser_fingerprint_id": browser_fingerprint_id
+					},
+					function(err, data) {
+						if (data && link_identifier) {
+							data['click_id'] = link_identifier;
+						}
+						attachVisibilityEvent();
+						finishInit(err, data);
+					}
+				);
+			}
+		);
+		return;
+	}
+
+	var isReferrable = (options &&
+			typeof options.isReferrable !== 'undefined' &&
+			options.isReferrable !== null) ?
+		options.isReferrable :
+		null;
+	var apiCordovaTitanium = function(data) {
+		if (!freshInstall) {
+			data['identity_id'] = sessionData['identity_id'];
+			data['device_fingerprint_id'] = sessionData['device_fingerprint_id'];
+		}
+		self._api(
+			freshInstall ? resources.install : resources.open,
+			data,
+			function(err, data) {
+				finishInit(err, data);
+			}
+		);
+	};
+
+	if (CORDOVA_BUILD) {
+		var args = [ ];
+		if (isReferrable !== null) {
+			args.push(isReferrable ? 1 : 0);
+		}
+		cordova.require('cordova/exec')(
+			apiCordovaTitanium,
+			function() {
+				done('Error getting device data!');
+			},
+			'BranchDevice',
+			freshInstall ? 'getInstallData' : 'getOpenData',
+			args
+		);
+	}
+	else if (TITANIUM_BUILD) {
+		var data = { };
+		var branchTitaniumSDK = require('io.branch.sdk');
+		if (link_identifier) {
+			data['link_identifier'] = link_identifier;
+		}
+		if (freshInstall) {
+			data = branchTitaniumSDK.getInstallData(
+				self.debug,
+				(isReferrable === null) ? -1 : (isReferrable ? 1 : 0)
+			);
+		}
+		else {
+			data = branchTitaniumSDK.getOpenData(
+				(isReferrable === null) ? -1 : (isReferrable ? 1 : 0)
+			);
+		}
+		apiCordovaTitanium(data);
+	}
+};
+
+Branch.prototype['init'] = wrap(
+	callback_params.CALLBACK_ERR_DATA,
+	function(done, data, options) {
+		this._init(done, data, options);
 	},
 	true
 );
@@ -551,6 +555,16 @@ Branch.prototype['deepviewInit'] = wrap(
 		sanityChecks(data);
 
 		self.branch_key = data['branch_key'];
+		this._init(
+			function(err, data) {
+				if (err) {
+					done(err);
+				}
+				// ...
+			},
+			self.branch_key,
+			options
+		);
 
 		var getBranchEquivalentUrl = function(branch_key, params) {
 			var url = 'https://bnc.lt/a/' + branch_key + '?';
@@ -570,7 +584,8 @@ Branch.prototype['deepviewInit'] = wrap(
 		self.init_state = init_states.INIT_SUCCEEDED;
 
 		done(Branch.prototype._equivalent_base_url, null);
-	}
+	},
+	true
 );
 
 /**

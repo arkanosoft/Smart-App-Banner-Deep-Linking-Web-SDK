@@ -1453,7 +1453,7 @@ if (CORDOVA_BUILD || TITANIUM_BUILD) {
     this.debug = a;
   };
 }
-Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c) {
+Branch.prototype._init = function(a, b, c) {
   var d = this;
   d.init_state = init_states.INIT_PENDING;
   utils.isKey(b) ? d.branch_key = b : d.app_id = b;
@@ -1469,11 +1469,9 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
       d.device_fingerprint_id = a.device_fingerprint_id, a.link_click_id && (d.link_click_id = a.link_click_id);
     }
     return a;
-  };
-  b = c && "undefined" !== typeof c.isReferrable && null !== c.isReferrable ? c.isReferrable : null;
-  var f = session.get(d._storage);
-  c = c && "undefined" !== typeof c.url && null !== c.url ? c.url : null;
-  var g = WEB_BUILD ? utils.getParamValue("_branch_match_id") || utils.hashValue("r") : c ? utils.getParamValue(c) : null, h = !f || !f.identity_id, k = function(a, b) {
+  }, f = session.get(d._storage);
+  b = c && "undefined" !== typeof c.url && null !== c.url ? c.url : null;
+  var g = WEB_BUILD ? utils.getParamValue("_branch_match_id") || utils.hashValue("r") : b ? utils.getParamValue(b) : null, h = !f || !f.identity_id, k = function(a, b) {
     WEB_BUILD && d._api(resources._r, {sdk:config.version}, function(a, b) {
       b && (c.browser_fingerprint_id = b);
     });
@@ -1511,27 +1509,30 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
         });
       });
     } else {
-      if (c = function(a) {
+      if (c = c && "undefined" !== typeof c.isReferrable && null !== c.isReferrable ? c.isReferrable : null, b = function(a) {
         h || (a.identity_id = f.identity_id, a.device_fingerprint_id = f.device_fingerprint_id);
         d._api(h ? resources.install : resources.open, a, function(a, b) {
           l(a, b);
         });
       }, CORDOVA_BUILD) {
         var m = [];
-        null !== b && m.push(b ? 1 : 0);
-        cordova.require("cordova/exec")(c, function() {
+        null !== c && m.push(c ? 1 : 0);
+        cordova.require("cordova/exec")(b, function() {
           a("Error getting device data!");
         }, "BranchDevice", h ? "getInstallData" : "getOpenData", m);
       } else {
         if (TITANIUM_BUILD) {
           var m = {}, p = require("io.branch.sdk");
           g && (m.link_identifier = g);
-          m = h ? p.getInstallData(d.debug, null === b ? -1 : b ? 1 : 0) : p.getOpenData(null === b ? -1 : b ? 1 : 0);
-          c(m);
+          m = h ? p.getInstallData(d.debug, null === c ? -1 : c ? 1 : 0) : p.getOpenData(null === c ? -1 : c ? 1 : 0);
+          b(m);
         }
       }
     }
   }
+};
+Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c) {
+  this._init(a, b, c);
 }, !0);
 Branch.prototype.deepviewInit = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c) {
   if (this.init_state === init_states.INIT_PENDING) {
@@ -1544,6 +1545,9 @@ Branch.prototype.deepviewInit = wrap(callback_params.CALLBACK_ERR_DATA, function
     throw Error("Please provide a valid data['branch_key']");
   }
   this.branch_key = b.branch_key;
+  this._init(function(b, c) {
+    b && a(b);
+  }, this.branch_key, c);
   utils.loadJavascriptFile(function(a, b) {
     var c = "https://bnc.lt/a/" + a + "?";
     if (b) {
@@ -1556,7 +1560,7 @@ Branch.prototype.deepviewInit = wrap(callback_params.CALLBACK_ERR_DATA, function
   }(this.branch_key, b.url_params));
   this.init_state = init_states.INIT_SUCCEEDED;
   a(Branch.prototype._equivalent_base_url, null);
-});
+}, !0);
 Branch.prototype.data = wrap(callback_params.CALLBACK_ERR_DATA, function(a) {
   var b = utils.whiteListSessionData(session.get(this._storage));
   b.referring_link = this._referringLink();
