@@ -1103,7 +1103,7 @@ Server.prototype.getUrl = function(a, b) {
       return {error:n.message};
     }
   }
-  "/v1/event" === a.endpoint && (l.metadata = JSON.stringify(l.metadata || {}));
+  "/v1/event" === a.endpoint && (console.log(l), l.metadata = JSON.stringify(l.metadata || {}));
   return {data:this.serializeObject(l, ""), url:e};
 };
 Server.prototype.createScript = function(a) {
@@ -1559,7 +1559,7 @@ Branch.prototype.deepviewInit = wrap(callback_params.CALLBACK_ERR_DATA, function
     return c + "&js_embed=true";
   }(this.branch_key, b.url_params));
   this.init_state = init_states.INIT_SUCCEEDED;
-  a(Branch.prototype._equivalent_base_url, null);
+  a(this._equivalent_base_url, null);
 }, !0);
 Branch.prototype.data = wrap(callback_params.CALLBACK_ERR_DATA, function(a) {
   var b = utils.whiteListSessionData(session.get(this._storage));
