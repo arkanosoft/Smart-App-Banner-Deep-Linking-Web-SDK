@@ -24,10 +24,10 @@
 /* Begin PBXBuildFile section */
 		24DD6CF91134B3F500162E58 /* IoBranchSdkModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DD6CF71134B3F500162E58 /* IoBranchSdkModule.h */; };
 		24DD6CFA1134B3F500162E58 /* IoBranchSdkModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* IoBranchSdkModule.m */; };
+		24DE9E1111C5FE74003F90F6 /* IoBranchSdkModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* IoBranchSdkModuleAssets.h */; };
+		24DE9E1211C5FE74003F90F6 /* IoBranchSdkModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* IoBranchSdkModuleAssets.m */; };
 		AA747D9F0F9514B9006C5449 /* IoBranchSdk_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* IoBranchSdk_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
-		CF2577951B0FA70000C9FEFC /* BNCDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = CF2577931B0FA70000C9FEFC /* BNCDevice.h */; };
-		CF2577961B0FA70000C9FEFC /* BNCDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = CF2577941B0FA70000C9FEFC /* BNCDevice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,19 +36,19 @@
 			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = BranchSDK;
+			remoteInfo = "BranchSDK";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		24DD6CF71134B3F500162E58 /* IoBranchSdkModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IoBranchSdkModule.h; path = Classes/IoBranchSdkModule.h; sourceTree = "<group>"; };
-		24DD6CF81134B3F500162E58 /* IoBranchSdkModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IoBranchSdkModule.m; path = Classes/IoBranchSdkModule.m; sourceTree = "<group>"; };
+		24DD6CF71134B3F500162E58 /* IoBranchSdkModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoBranchSdkModule.h"; path = "Classes/IoBranchSdkModule.h"; sourceTree = "<group>"; };
+		24DD6CF81134B3F500162E58 /* IoBranchSdkModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IoBranchSdkModule.m"; path = "Classes/IoBranchSdkModule.m"; sourceTree = "<group>"; };
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
-		AA747D9E0F9514B9006C5449 /* IoBranchSdk_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IoBranchSdk_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		24DE9E0F11C5FE74003F90F6 /* IoBranchSdkModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IoBranchSdkModuleAssets.h"; path = "Classes/IoBranchSdkModuleAssets.h"; sourceTree = "<group>"; };
+		24DE9E1011C5FE74003F90F6 /* IoBranchSdkModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IoBranchSdkModuleAssets.m"; path = "Classes/IoBranchSdkModuleAssets.m"; sourceTree = "<group>"; };
+		AA747D9E0F9514B9006C5449 /* IoBranchSdk_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IoBranchSdk_Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		CF2577931B0FA70000C9FEFC /* BNCDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BNCDevice.h; path = Classes/BNCDevice.h; sourceTree = "<group>"; };
-		CF2577941B0FA70000C9FEFC /* BNCDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BNCDevice.m; path = Classes/BNCDevice.m; sourceTree = "<group>"; };
-		D2AAC07E0554694100DB518D /* libIoBranchSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIoBranchSdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2AAC07E0554694100DB518D /* libIoBranchSdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libIoBranchSdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +79,7 @@
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
 			);
-			name = BranchSDK;
+			name = "BranchSDK";
 			sourceTree = "<group>";
 		};
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
@@ -93,8 +93,8 @@
 		08FB77AEFE84172EC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CF2577931B0FA70000C9FEFC /* BNCDevice.h */,
-				CF2577941B0FA70000C9FEFC /* BNCDevice.m */,
+				24DE9E0F11C5FE74003F90F6 /* IoBranchSdkModuleAssets.h */,
+				24DE9E1011C5FE74003F90F6 /* IoBranchSdkModuleAssets.m */,
 				24DD6CF71134B3F500162E58 /* IoBranchSdkModule.h */,
 				24DD6CF81134B3F500162E58 /* IoBranchSdkModule.m */,
 			);
@@ -118,8 +118,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA747D9F0F9514B9006C5449 /* IoBranchSdk_Prefix.pch in Headers */,
-				CF2577951B0FA70000C9FEFC /* BNCDevice.h in Headers */,
 				24DD6CF91134B3F500162E58 /* IoBranchSdkModule.h in Headers */,
+				24DE9E1111C5FE74003F90F6 /* IoBranchSdkModuleAssets.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,8 +138,8 @@
 			);
 			dependencies = (
 			);
-			name = BranchSDK;
-			productName = BranchSDK;
+			name = "BranchSDK";
+			productName = "BranchSDK";
 			productReference = D2AAC07E0554694100DB518D /* libIoBranchSdk.a */;
 			productType = "com.apple.product-type.library.static";
 		};
@@ -194,7 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24DD6CFA1134B3F500162E58 /* IoBranchSdkModule.m in Sources */,
-				CF2577961B0FA70000C9FEFC /* BNCDevice.m in Sources */,
+				24DE9E1211C5FE74003F90F6 /* IoBranchSdkModuleAssets.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,11 +215,11 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DSTROOT = /tmp/IoBranchSdk.dst;
+				DSTROOT = "/tmp/IoBranchSdk.dst";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = IoBranchSdk_Prefix.pch;
+				GCC_PREFIX_HEADER = "IoBranchSdk_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "TI_VERSION=$(TI_VERSION)";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = "";
@@ -239,7 +239,7 @@
 					"-DTI_POST_1_2",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = IoBranchSdk;
+				PRODUCT_NAME = "IoBranchSdk";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
@@ -253,11 +253,11 @@
 			baseConfigurationReference = 24DD6D1B1134B66800162E58 /* titanium.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DSTROOT = /tmp/IoBranchSdk.dst;
+				DSTROOT = "/tmp/IoBranchSdk.dst";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = IoBranchSdk_Prefix.pch;
+				GCC_PREFIX_HEADER = "IoBranchSdk_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "TI_VERSION=$(TI_VERSION)";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = "";
@@ -274,7 +274,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = IoBranchSdk;
+				PRODUCT_NAME = "IoBranchSdk";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -288,11 +288,11 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DSTROOT = /tmp/IoBranchSdk.dst;
+				DSTROOT = "/tmp/IoBranchSdk.dst";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = IoBranchSdk_Prefix.pch;
+				GCC_PREFIX_HEADER = "IoBranchSdk_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "TI_VERSION=$(TI_VERSION)";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = "";
@@ -311,7 +311,7 @@
 					"-DTI_POST_1_2",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = IoBranchSdk;
+				PRODUCT_NAME = "IoBranchSdk";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
@@ -326,11 +326,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LIBRARY = "libstdc++";
-				DSTROOT = /tmp/IoBranchSdk.dst;
+				DSTROOT = "/tmp/IoBranchSdk.dst";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = IoBranchSdk_Prefix.pch;
+				GCC_PREFIX_HEADER = "IoBranchSdk_Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = "TI_VERSION=$(TI_VERSION)";
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = "";
@@ -346,7 +346,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DTI_POST_1_2";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = IoBranchSdk;
+				PRODUCT_NAME = "IoBranchSdk";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "";
